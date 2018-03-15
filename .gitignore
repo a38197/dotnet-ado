@@ -1,0 +1,17 @@
+*logs/
+*.orig
+*.cfg
+*.suo
+
+
+#Visual Studio
+[Bb]in
+[Dd]ebug*/
+obj/
+*.suo
+*.suo
+packages/
+EntityFrameworkEnvironment/packages/
+*.user
+
+.idea

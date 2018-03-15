@@ -1,0 +1,1566 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SI2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AuctionSale">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="int" Nullable="false" />
+          <Property Name="MinIncrement" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bid">
+          <Key>
+            <PropertyRef Name="BidId" />
+          </Key>
+          <Property Name="BidId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" Nullable="false" />
+          <Property Name="SaleId" Type="int" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+          <Property Name="Value" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="NumericCode" />
+          </Key>
+          <Property Name="NumericCode" Type="int" Nullable="false" />
+          <Property Name="Alpha2Code" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="Alpha3Code" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemId" />
+          </Key>
+          <Property Name="ItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ItemConditionId" Type="int" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ItemCondition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PostalValues">
+          <Key>
+            <PropertyRef Name="NumericCodeFrom" />
+            <PropertyRef Name="NumericCodeTo" />
+          </Key>
+          <Property Name="NumericCodeFrom" Type="int" Nullable="false" />
+          <Property Name="NumericCodeTo" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Purchase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseDate" Type="datetime" Nullable="false" />
+          <Property Name="TotalValue" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="CreditCard" Type="decimal" Precision="20" Scale="0" />
+          <Property Name="BidId" Type="int" Nullable="false" />
+          <Property Name="CountryToShip" Type="int" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Sale">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="Location" Type="varchar" MaxLength="250" />
+          <Property Name="CountryNum" Type="int" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="SaleValue" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="IsAuction" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="varbinary" MaxLength="8000" Nullable="false" />
+          <Property Name="CountryNum" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserAddressHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OldAddress" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="OldCountry" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SI2.app.V_ActiveAuctions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_ActiveAuctions">
+          <Key>
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="UserEmail" />
+          </Key>
+          <Property Name="SaleId" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="decimal" Precision="15" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SI2.app.V_AuctionNotCompleted' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_AuctionNotCompleted">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SI2.app.V_RakedBids' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_RakedBids">
+          <Key>
+            <PropertyRef Name="BidId" />
+            <PropertyRef Name="Stamp" />
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="UserEmail" />
+            <PropertyRef Name="Deleted" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="BidId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" Nullable="false" />
+          <Property Name="SaleId" Type="int" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+          <Property Name="Value" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="RNK_SALE" Type="bigint" />
+          <Property Name="RNK_DATE" Type="bigint" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SI2.app.vAuction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vAuction">
+          <Key>
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="ItemId" />
+            <PropertyRef Name="SaleValue" />
+            <PropertyRef Name="MinIncrement" />
+          </Key>
+          <Property Name="SaleId" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="Location" Type="varchar" MaxLength="250" />
+          <Property Name="CountryNum" Type="int" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="SaleValue" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="MinIncrement" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="ROW_NR" Type="bigint" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SI2.app.vBid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vBid">
+          <Key>
+            <PropertyRef Name="BidId" />
+            <PropertyRef Name="Deleted" />
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="Stamp" />
+            <PropertyRef Name="UserEmail" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="BidId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+          <Property Name="SaleId" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="ROW_NR" Type="bigint" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SI2.app.vItem' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vItem">
+          <Key>
+            <PropertyRef Name="ItemId" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="ItemConditionId" />
+            <PropertyRef Name="UserEmail" />
+          </Key>
+          <Property Name="ItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ItemConditionId" Type="int" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ROW_NR" Type="bigint" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SI2.app.vSale' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vSale">
+          <Key>
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="ItemId" />
+            <PropertyRef Name="SaleValue" />
+          </Key>
+          <Property Name="SaleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="Location" Type="varchar" MaxLength="250" />
+          <Property Name="CountryNum" Type="int" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="SaleValue" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="ROW_NR" Type="bigint" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SI2.app.vUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vUser">
+          <Key>
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="CountryNum" />
+          </Key>
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="varbinary" MaxLength="8000" Nullable="false" />
+          <Property Name="CountryNum" Type="int" Nullable="false" />
+          <Property Name="ROW_NR" Type="bigint" />
+        </EntityType>
+        <Association Name="FK_AuctionSale_SaleId">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="1" />
+          <End Role="AuctionSale" Type="Self.AuctionSale" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Sale">
+              <PropertyRef Name="SaleId" />
+            </Principal>
+            <Dependent Role="AuctionSale">
+              <PropertyRef Name="SaleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bid_SaleId">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="1" />
+          <End Role="Bid" Type="Self.Bid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sale">
+              <PropertyRef Name="SaleId" />
+            </Principal>
+            <Dependent Role="Bid">
+              <PropertyRef Name="SaleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bid_UserEmail">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Bid" Type="Self.Bid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="Bid">
+              <PropertyRef Name="UserEmail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_ItemConditionId">
+          <End Role="ItemCondition" Type="Self.ItemCondition" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCondition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="ItemConditionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_UserEmail">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="UserEmail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostalValues_NumericCodeFrom">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="PostalValues" Type="Self.PostalValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="PostalValues">
+              <PropertyRef Name="NumericCodeFrom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostalValues_NumericCodeTo">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="PostalValues" Type="Self.PostalValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="PostalValues">
+              <PropertyRef Name="NumericCodeTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Purchase_BidId">
+          <End Role="Bid" Type="Self.Bid" Multiplicity="1" />
+          <End Role="Purchase" Type="Self.Purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bid">
+              <PropertyRef Name="BidId" />
+            </Principal>
+            <Dependent Role="Purchase">
+              <PropertyRef Name="BidId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Purchase_CountryToShip">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Purchase" Type="Self.Purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="Purchase">
+              <PropertyRef Name="CountryToShip" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sale_CountryNum">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="CountryNum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sale_ItemId">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="ItemId" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_CountryNum">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="CountryNum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAddressHistory_Email">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserAddressHistory" Type="Self.UserAddressHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="UserAddressHistory">
+              <PropertyRef Name="Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="getLastUserBid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="app" ReturnType="int">
+          <Parameter Name="saleId" Type="int" Mode="In" />
+          <Parameter Name="userMail" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getMD5HashPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="app" ReturnType="varbinary">
+          <Parameter Name="plainPassword" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getNextBidValid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="app" ReturnType="decimal">
+          <Parameter Name="saleId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getNLastBids" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="nBids" Type="int" Mode="In" />
+          <Parameter Name="saleId" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="SaleId" Type="int" />
+                <Property Name="Bid" Type="decimal" Precision="15" Scale="2" />
+                <Property Name="Stamp" Type="datetime" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="getShipValue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="app" ReturnType="decimal">
+          <Parameter Name="NumericCodeS" Type="int" Mode="In" />
+          <Parameter Name="NumericCodeD" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_addAuctionSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="itemId" Type="int" Mode="In" />
+          <Parameter Name="value" Type="decimal" Mode="In" />
+          <Parameter Name="start" Type="date" Mode="In" />
+          <Parameter Name="end" Type="date" Mode="In" />
+          <Parameter Name="location" Type="varchar" Mode="In" />
+          <Parameter Name="country" Type="int" Mode="In" />
+          <Parameter Name="minIncre" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_addBid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="saleId" Type="int" Mode="In" />
+          <Parameter Name="buyerEmail" Type="varchar" Mode="In" />
+          <Parameter Name="value" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_addCountry" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="numCode" Type="int" Mode="In" />
+          <Parameter Name="alpha2" Type="varchar" Mode="In" />
+          <Parameter Name="alpha3" Type="varchar" Mode="In" />
+          <Parameter Name="desc" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_addItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="desc" Type="varchar" Mode="In" />
+          <Parameter Name="condition" Type="int" Mode="In" />
+          <Parameter Name="email" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_addPostalValue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="numCodeSource" Type="int" Mode="In" />
+          <Parameter Name="numCodeDest" Type="int" Mode="In" />
+          <Parameter Name="value" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_addSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="itemId" Type="int" Mode="In" />
+          <Parameter Name="value" Type="decimal" Mode="In" />
+          <Parameter Name="start" Type="date" Mode="In" />
+          <Parameter Name="end" Type="date" Mode="In" />
+          <Parameter Name="location" Type="varchar" Mode="In" />
+          <Parameter Name="country" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_addUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="email" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="address" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+          <Parameter Name="country" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_closeSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="saleId" Type="int" Mode="In" />
+          <Parameter Name="creditCard" Type="decimal" Mode="In" />
+          <Parameter Name="addressToShip" Type="varchar" Mode="In" />
+          <Parameter Name="CountryToShip" Type="int" Mode="In" />
+          <Parameter Name="buyerEmail" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_deleteAuctionSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="saleId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_deleteBid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="saleId" Type="int" Mode="In" />
+          <Parameter Name="userMail" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_deleteCountry" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="numCode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_deleteItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_deletePostalValue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="numCodeSource" Type="int" Mode="In" />
+          <Parameter Name="numCodeDest" Type="int" Mode="In" />
+          <Parameter Name="value" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_deleteSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="saleId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_deleteUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="email" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_editAuctionSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="SaleId" Type="int" Mode="In" />
+          <Parameter Name="value" Type="decimal" Mode="In" />
+          <Parameter Name="start" Type="date" Mode="In" />
+          <Parameter Name="end" Type="date" Mode="In" />
+          <Parameter Name="location" Type="varchar" Mode="In" />
+          <Parameter Name="minIncre" Type="decimal" Mode="In" />
+          <Parameter Name="itemId" Type="int" Mode="In" />
+          <Parameter Name="country" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_editCountry" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="numCode" Type="int" Mode="In" />
+          <Parameter Name="alpha2" Type="varchar" Mode="In" />
+          <Parameter Name="alpha3" Type="varchar" Mode="In" />
+          <Parameter Name="desc" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_editItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="desc" Type="varchar" Mode="In" />
+          <Parameter Name="condition" Type="int" Mode="In" />
+          <Parameter Name="email" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_editPostalValue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="numCodeSource" Type="int" Mode="In" />
+          <Parameter Name="numCodeDest" Type="int" Mode="In" />
+          <Parameter Name="value" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_editSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="SaleId" Type="int" Mode="In" />
+          <Parameter Name="value" Type="decimal" Mode="In" />
+          <Parameter Name="start" Type="date" Mode="In" />
+          <Parameter Name="end" Type="date" Mode="In" />
+          <Parameter Name="location" Type="varchar" Mode="In" />
+          <Parameter Name="country" Type="int" Mode="In" />
+          <Parameter Name="itemId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_editUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="email" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="address" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+          <Parameter Name="country" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_validateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="app">
+          <Parameter Name="email" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+          <Parameter Name="result" Type="bit" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="SI2ModelStoreContainer">
+          <EntitySet Name="AuctionSale" EntityType="Self.AuctionSale" Schema="app" store:Type="Tables" />
+          <EntitySet Name="Bid" EntityType="Self.Bid" Schema="app" store:Type="Tables" />
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="app" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="app" store:Type="Tables" />
+          <EntitySet Name="ItemCondition" EntityType="Self.ItemCondition" Schema="app" store:Type="Tables" />
+          <EntitySet Name="PostalValues" EntityType="Self.PostalValues" Schema="app" store:Type="Tables" />
+          <EntitySet Name="Purchase" EntityType="Self.Purchase" Schema="app" store:Type="Tables" />
+          <EntitySet Name="Sale" EntityType="Self.Sale" Schema="app" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="app" store:Type="Tables" />
+          <EntitySet Name="UserAddressHistory" EntityType="Self.UserAddressHistory" Schema="app" store:Type="Tables" />
+          <EntitySet Name="V_ActiveAuctions" EntityType="Self.V_ActiveAuctions" store:Type="Views" store:Schema="app">
+            <DefiningQuery>SELECT 
+    [V_ActiveAuctions].[SaleId] AS [SaleId], 
+    [V_ActiveAuctions].[StartDate] AS [StartDate], 
+    [V_ActiveAuctions].[EndDate] AS [EndDate], 
+    [V_ActiveAuctions].[Description] AS [Description], 
+    [V_ActiveAuctions].[UserEmail] AS [UserEmail], 
+    [V_ActiveAuctions].[Value] AS [Value]
+    FROM [app].[V_ActiveAuctions] AS [V_ActiveAuctions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_AuctionNotCompleted" EntityType="Self.V_AuctionNotCompleted" store:Type="Views" store:Schema="app">
+            <DefiningQuery>SELECT 
+    [V_AuctionNotCompleted].[SaleId] AS [SaleId]
+    FROM [app].[V_AuctionNotCompleted] AS [V_AuctionNotCompleted]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_RakedBids" EntityType="Self.V_RakedBids" store:Type="Views" store:Schema="app">
+            <DefiningQuery>SELECT 
+    [V_RakedBids].[BidId] AS [BidId], 
+    [V_RakedBids].[Stamp] AS [Stamp], 
+    [V_RakedBids].[SaleId] AS [SaleId], 
+    [V_RakedBids].[UserEmail] AS [UserEmail], 
+    [V_RakedBids].[Deleted] AS [Deleted], 
+    [V_RakedBids].[Value] AS [Value], 
+    [V_RakedBids].[RNK_SALE] AS [RNK_SALE], 
+    [V_RakedBids].[RNK_DATE] AS [RNK_DATE]
+    FROM [app].[V_RakedBids] AS [V_RakedBids]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vAuction" EntityType="Self.vAuction" store:Type="Views" store:Schema="app">
+            <DefiningQuery>SELECT 
+    [vAuction].[SaleId] AS [SaleId], 
+    [vAuction].[StartDate] AS [StartDate], 
+    [vAuction].[EndDate] AS [EndDate], 
+    [vAuction].[Location] AS [Location], 
+    [vAuction].[CountryNum] AS [CountryNum], 
+    [vAuction].[ItemId] AS [ItemId], 
+    [vAuction].[SaleValue] AS [SaleValue], 
+    [vAuction].[MinIncrement] AS [MinIncrement], 
+    [vAuction].[ROW_NR] AS [ROW_NR]
+    FROM [app].[vAuction] AS [vAuction]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vBid" EntityType="Self.vBid" store:Type="Views" store:Schema="app">
+            <DefiningQuery>SELECT 
+    [vBid].[BidId] AS [BidId], 
+    [vBid].[Deleted] AS [Deleted], 
+    [vBid].[SaleId] AS [SaleId], 
+    [vBid].[Stamp] AS [Stamp], 
+    [vBid].[UserEmail] AS [UserEmail], 
+    [vBid].[Value] AS [Value], 
+    [vBid].[ROW_NR] AS [ROW_NR]
+    FROM [app].[vBid] AS [vBid]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vItem" EntityType="Self.vItem" store:Type="Views" store:Schema="app">
+            <DefiningQuery>SELECT 
+    [vItem].[ItemId] AS [ItemId], 
+    [vItem].[Description] AS [Description], 
+    [vItem].[ItemConditionId] AS [ItemConditionId], 
+    [vItem].[UserEmail] AS [UserEmail], 
+    [vItem].[ROW_NR] AS [ROW_NR]
+    FROM [app].[vItem] AS [vItem]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vSale" EntityType="Self.vSale" store:Type="Views" store:Schema="app">
+            <DefiningQuery>SELECT 
+    [vSale].[SaleId] AS [SaleId], 
+    [vSale].[StartDate] AS [StartDate], 
+    [vSale].[EndDate] AS [EndDate], 
+    [vSale].[Location] AS [Location], 
+    [vSale].[CountryNum] AS [CountryNum], 
+    [vSale].[ItemId] AS [ItemId], 
+    [vSale].[SaleValue] AS [SaleValue], 
+    [vSale].[ROW_NR] AS [ROW_NR]
+    FROM [app].[vSale] AS [vSale]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vUser" EntityType="Self.vUser" store:Type="Views" store:Schema="app">
+            <DefiningQuery>SELECT 
+    [vUser].[Email] AS [Email], 
+    [vUser].[Name] AS [Name], 
+    [vUser].[Address] AS [Address], 
+    [vUser].[Password] AS [Password], 
+    [vUser].[CountryNum] AS [CountryNum], 
+    [vUser].[ROW_NR] AS [ROW_NR]
+    FROM [app].[vUser] AS [vUser]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_AuctionSale_SaleId" Association="Self.FK_AuctionSale_SaleId">
+            <End Role="Sale" EntitySet="Sale" />
+            <End Role="AuctionSale" EntitySet="AuctionSale" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bid_SaleId" Association="Self.FK_Bid_SaleId">
+            <End Role="Sale" EntitySet="Sale" />
+            <End Role="Bid" EntitySet="Bid" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bid_UserEmail" Association="Self.FK_Bid_UserEmail">
+            <End Role="User" EntitySet="User" />
+            <End Role="Bid" EntitySet="Bid" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_ItemConditionId" Association="Self.FK_Item_ItemConditionId">
+            <End Role="ItemCondition" EntitySet="ItemCondition" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_UserEmail" Association="Self.FK_Item_UserEmail">
+            <End Role="User" EntitySet="User" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostalValues_NumericCodeFrom" Association="Self.FK_PostalValues_NumericCodeFrom">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="PostalValues" EntitySet="PostalValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostalValues_NumericCodeTo" Association="Self.FK_PostalValues_NumericCodeTo">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="PostalValues" EntitySet="PostalValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Purchase_BidId" Association="Self.FK_Purchase_BidId">
+            <End Role="Bid" EntitySet="Bid" />
+            <End Role="Purchase" EntitySet="Purchase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Purchase_CountryToShip" Association="Self.FK_Purchase_CountryToShip">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Purchase" EntitySet="Purchase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sale_CountryNum" Association="Self.FK_Sale_CountryNum">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Sale" EntitySet="Sale" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sale_ItemId" Association="Self.FK_Sale_ItemId">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="Sale" EntitySet="Sale" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_CountryNum" Association="Self.FK_User_CountryNum">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAddressHistory_Email" Association="Self.FK_UserAddressHistory_Email">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserAddressHistory" EntitySet="UserAddressHistory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SI2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="getNLastBids_Result">
+          <Property Name="SaleId" Type="Int32" />
+          <Property Name="Bid" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="Stamp" Type="DateTime" />
+        </ComplexType>
+        <EntityType Name="AuctionSale">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" />
+          <Property Name="MinIncrement" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Sale" Relationship="Self.FK_AuctionSale_SaleId" FromRole="AuctionSale" ToRole="Sale" />
+        </EntityType>
+        <EntityType Name="Bid">
+          <Key>
+            <PropertyRef Name="BidId" />
+          </Key>
+          <Property Name="BidId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SaleId" Type="Int32" Nullable="false" />
+          <Property Name="UserEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <Property Name="Value" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Sale" Relationship="Self.FK_Bid_SaleId" FromRole="Bid" ToRole="Sale" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Bid_UserEmail" FromRole="Bid" ToRole="User" />
+          <NavigationProperty Name="Purchases" Relationship="Self.FK_Purchase_BidId" FromRole="Bid" ToRole="Purchase" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="NumericCode" />
+          </Key>
+          <Property Name="NumericCode" Type="Int32" Nullable="false" />
+          <Property Name="Alpha2Code" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Alpha3Code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="PostalValues" Relationship="Self.FK_PostalValues_NumericCodeFrom" FromRole="Country" ToRole="PostalValues" />
+          <NavigationProperty Name="PostalValues1" Relationship="Self.FK_PostalValues_NumericCodeTo" FromRole="Country" ToRole="PostalValues" />
+          <NavigationProperty Name="Purchases" Relationship="Self.FK_Purchase_CountryToShip" FromRole="Country" ToRole="Purchase" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK_Sale_CountryNum" FromRole="Country" ToRole="Sale" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_User_CountryNum" FromRole="Country" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemId" />
+          </Key>
+          <Property Name="ItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ItemConditionId" Type="Int32" Nullable="false" />
+          <Property Name="UserEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ItemCondition" Relationship="Self.FK_Item_ItemConditionId" FromRole="Item" ToRole="ItemCondition" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Item_UserEmail" FromRole="Item" ToRole="User" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK_Sale_ItemId" FromRole="Item" ToRole="Sale" />
+        </EntityType>
+        <EntityType Name="ItemCondition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Items" Relationship="Self.FK_Item_ItemConditionId" FromRole="ItemCondition" ToRole="Item" />
+        </EntityType>
+        <EntityType Name="PostalValue">
+          <Key>
+            <PropertyRef Name="NumericCodeFrom" />
+            <PropertyRef Name="NumericCodeTo" />
+          </Key>
+          <Property Name="NumericCodeFrom" Type="Int32" Nullable="false" />
+          <Property Name="NumericCodeTo" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Country" Relationship="Self.FK_PostalValues_NumericCodeFrom" FromRole="PostalValues" ToRole="Country" />
+          <NavigationProperty Name="Country1" Relationship="Self.FK_PostalValues_NumericCodeTo" FromRole="PostalValues" ToRole="Country" />
+        </EntityType>
+        <EntityType Name="Purchase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalValue" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="CreditCard" Type="Decimal" Precision="20" Scale="0" />
+          <Property Name="BidId" Type="Int32" Nullable="false" />
+          <Property Name="CountryToShip" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Bid" Relationship="Self.FK_Purchase_BidId" FromRole="Purchase" ToRole="Bid" />
+          <NavigationProperty Name="Country" Relationship="Self.FK_Purchase_CountryToShip" FromRole="Purchase" ToRole="Country" />
+        </EntityType>
+        <EntityType Name="Sale">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Location" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="CountryNum" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="SaleValue" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="IsAuction" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AuctionSale" Relationship="Self.FK_AuctionSale_SaleId" FromRole="Sale" ToRole="AuctionSale" />
+          <NavigationProperty Name="Bids" Relationship="Self.FK_Bid_SaleId" FromRole="Sale" ToRole="Bid" />
+          <NavigationProperty Name="Country" Relationship="Self.FK_Sale_CountryNum" FromRole="Sale" ToRole="Country" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_Sale_ItemId" FromRole="Sale" ToRole="Item" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="Binary" MaxLength="8000" FixedLength="false" Nullable="false" />
+          <Property Name="CountryNum" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Bids" Relationship="Self.FK_Bid_UserEmail" FromRole="User" ToRole="Bid" />
+          <NavigationProperty Name="Country" Relationship="Self.FK_User_CountryNum" FromRole="User" ToRole="Country" />
+          <NavigationProperty Name="Items" Relationship="Self.FK_Item_UserEmail" FromRole="User" ToRole="Item" />
+          <NavigationProperty Name="UserAddressHistories" Relationship="Self.FK_UserAddressHistory_Email" FromRole="User" ToRole="UserAddressHistory" />
+        </EntityType>
+        <EntityType Name="UserAddressHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OldAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OldCountry" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserAddressHistory_Email" FromRole="UserAddressHistory" ToRole="User" />
+        </EntityType>
+        <EntityType Name="V_AuctionNotCompleted">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="V_RakedBids">
+          <Key>
+            <PropertyRef Name="BidId" />
+            <PropertyRef Name="Stamp" />
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="UserEmail" />
+            <PropertyRef Name="Deleted" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="BidId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SaleId" Type="Int32" Nullable="false" />
+          <Property Name="UserEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <Property Name="Value" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="RNK_SALE" Type="Int64" />
+          <Property Name="RNK_DATE" Type="Int64" />
+        </EntityType>
+        <EntityType Name="vAuction">
+          <Key>
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="ItemId" />
+            <PropertyRef Name="SaleValue" />
+            <PropertyRef Name="MinIncrement" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Location" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="CountryNum" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="SaleValue" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="MinIncrement" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="ROW_NR" Type="Int64" />
+        </EntityType>
+        <EntityType Name="vItem">
+          <Key>
+            <PropertyRef Name="ItemId" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="ItemConditionId" />
+            <PropertyRef Name="UserEmail" />
+          </Key>
+          <Property Name="ItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ItemConditionId" Type="Int32" Nullable="false" />
+          <Property Name="UserEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ROW_NR" Type="Int64" />
+        </EntityType>
+        <EntityType Name="vSale">
+          <Key>
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="ItemId" />
+            <PropertyRef Name="SaleValue" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Location" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="CountryNum" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="SaleValue" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="ROW_NR" Type="Int64" />
+        </EntityType>
+        <EntityType Name="vUser">
+          <Key>
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="CountryNum" />
+          </Key>
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="Binary" MaxLength="8000" FixedLength="false" Nullable="false" />
+          <Property Name="CountryNum" Type="Int32" Nullable="false" />
+          <Property Name="ROW_NR" Type="Int64" />
+        </EntityType>
+        <Association Name="FK_AuctionSale_SaleId">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="1" />
+          <End Role="AuctionSale" Type="Self.AuctionSale" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Sale">
+              <PropertyRef Name="SaleId" />
+            </Principal>
+            <Dependent Role="AuctionSale">
+              <PropertyRef Name="SaleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bid_SaleId">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="1" />
+          <End Role="Bid" Type="Self.Bid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sale">
+              <PropertyRef Name="SaleId" />
+            </Principal>
+            <Dependent Role="Bid">
+              <PropertyRef Name="SaleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bid_UserEmail">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Bid" Type="Self.Bid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="Bid">
+              <PropertyRef Name="UserEmail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Purchase_BidId">
+          <End Role="Bid" Type="Self.Bid" Multiplicity="1" />
+          <End Role="Purchase" Type="Self.Purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bid">
+              <PropertyRef Name="BidId" />
+            </Principal>
+            <Dependent Role="Purchase">
+              <PropertyRef Name="BidId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostalValues_NumericCodeFrom">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="PostalValues" Type="Self.PostalValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="PostalValues">
+              <PropertyRef Name="NumericCodeFrom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostalValues_NumericCodeTo">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="PostalValues" Type="Self.PostalValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="PostalValues">
+              <PropertyRef Name="NumericCodeTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Purchase_CountryToShip">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Purchase" Type="Self.Purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="Purchase">
+              <PropertyRef Name="CountryToShip" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sale_CountryNum">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="CountryNum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_CountryNum">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="NumericCode" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="CountryNum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_ItemConditionId">
+          <End Role="ItemCondition" Type="Self.ItemCondition" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemCondition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="ItemConditionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_UserEmail">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="UserEmail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sale_ItemId">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="ItemId" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAddressHistory_Email">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserAddressHistory" Type="Self.UserAddressHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Email" />
+            </Principal>
+            <Dependent Role="UserAddressHistory">
+              <PropertyRef Name="Email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SI2_Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AuctionSales" EntityType="Self.AuctionSale" />
+          <EntitySet Name="Bids" EntityType="Self.Bid" />
+          <EntitySet Name="Countries" EntityType="Self.Country" />
+          <EntitySet Name="Items" EntityType="Self.Item" />
+          <EntitySet Name="ItemConditions" EntityType="Self.ItemCondition" />
+          <EntitySet Name="PostalValues" EntityType="Self.PostalValue" />
+          <EntitySet Name="Purchases" EntityType="Self.Purchase" />
+          <EntitySet Name="Sales" EntityType="Self.Sale" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="UserAddressHistories" EntityType="Self.UserAddressHistory" />
+          <EntitySet Name="V_AuctionNotCompleted" EntityType="Self.V_AuctionNotCompleted" />
+          <EntitySet Name="V_RakedBids" EntityType="Self.V_RakedBids" />
+          <EntitySet Name="vAuctions" EntityType="Self.vAuction" />
+          <EntitySet Name="vItems" EntityType="Self.vItem" />
+          <EntitySet Name="vSales" EntityType="Self.vSale" />
+          <EntitySet Name="vUsers" EntityType="Self.vUser" />
+          <AssociationSet Name="FK_AuctionSale_SaleId" Association="Self.FK_AuctionSale_SaleId">
+            <End Role="Sale" EntitySet="Sales" />
+            <End Role="AuctionSale" EntitySet="AuctionSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bid_SaleId" Association="Self.FK_Bid_SaleId">
+            <End Role="Sale" EntitySet="Sales" />
+            <End Role="Bid" EntitySet="Bids" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bid_UserEmail" Association="Self.FK_Bid_UserEmail">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Bid" EntitySet="Bids" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Purchase_BidId" Association="Self.FK_Purchase_BidId">
+            <End Role="Bid" EntitySet="Bids" />
+            <End Role="Purchase" EntitySet="Purchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostalValues_NumericCodeFrom" Association="Self.FK_PostalValues_NumericCodeFrom">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="PostalValues" EntitySet="PostalValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostalValues_NumericCodeTo" Association="Self.FK_PostalValues_NumericCodeTo">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="PostalValues" EntitySet="PostalValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Purchase_CountryToShip" Association="Self.FK_Purchase_CountryToShip">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Purchase" EntitySet="Purchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sale_CountryNum" Association="Self.FK_Sale_CountryNum">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_CountryNum" Association="Self.FK_User_CountryNum">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_ItemConditionId" Association="Self.FK_Item_ItemConditionId">
+            <End Role="ItemCondition" EntitySet="ItemConditions" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_UserEmail" Association="Self.FK_Item_UserEmail">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sale_ItemId" Association="Self.FK_Sale_ItemId">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAddressHistory_Email" Association="Self.FK_UserAddressHistory_Email">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserAddressHistory" EntitySet="UserAddressHistories" />
+          </AssociationSet>
+          <FunctionImport Name="getNLastBids" ReturnType="Collection(SI2Model.getNLastBids_Result)" IsComposable="true">
+            <Parameter Name="nBids" Mode="In" Type="Int32" />
+            <Parameter Name="saleId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_addAuctionSale">
+            <Parameter Name="itemId" Mode="In" Type="Int32" />
+            <Parameter Name="value" Mode="In" Type="Decimal" />
+            <Parameter Name="start" Mode="In" Type="DateTime" />
+            <Parameter Name="end" Mode="In" Type="DateTime" />
+            <Parameter Name="location" Mode="In" Type="String" />
+            <Parameter Name="country" Mode="In" Type="Int32" />
+            <Parameter Name="minIncre" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_addBid">
+            <Parameter Name="saleId" Mode="In" Type="Int32" />
+            <Parameter Name="buyerEmail" Mode="In" Type="String" />
+            <Parameter Name="value" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_addCountry">
+            <Parameter Name="numCode" Mode="In" Type="Int32" />
+            <Parameter Name="alpha2" Mode="In" Type="String" />
+            <Parameter Name="alpha3" Mode="In" Type="String" />
+            <Parameter Name="desc" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_addItem">
+            <Parameter Name="desc" Mode="In" Type="String" />
+            <Parameter Name="condition" Mode="In" Type="Int32" />
+            <Parameter Name="email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_addPostalValue">
+            <Parameter Name="numCodeSource" Mode="In" Type="Int32" />
+            <Parameter Name="numCodeDest" Mode="In" Type="Int32" />
+            <Parameter Name="value" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_addSale">
+            <Parameter Name="itemId" Mode="In" Type="Int32" />
+            <Parameter Name="value" Mode="In" Type="Decimal" />
+            <Parameter Name="start" Mode="In" Type="DateTime" />
+            <Parameter Name="end" Mode="In" Type="DateTime" />
+            <Parameter Name="location" Mode="In" Type="String" />
+            <Parameter Name="country" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_addUser">
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="address" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="country" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_closeSale">
+            <Parameter Name="saleId" Mode="In" Type="Int32" />
+            <Parameter Name="creditCard" Mode="In" Type="Decimal" />
+            <Parameter Name="addressToShip" Mode="In" Type="String" />
+            <Parameter Name="CountryToShip" Mode="In" Type="Int32" />
+            <Parameter Name="buyerEmail" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_deleteAuctionSale">
+          <Parameter Name="saleId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_deleteBid">
+            <Parameter Name="saleId" Mode="In" Type="Int32" />
+            <Parameter Name="userMail" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_deleteCountry">
+          <Parameter Name="numCode" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_deleteItem">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_deletePostalValue">
+            <Parameter Name="numCodeSource" Mode="In" Type="Int32" />
+            <Parameter Name="numCodeDest" Mode="In" Type="Int32" />
+            <Parameter Name="value" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_deleteSale">
+          <Parameter Name="saleId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_deleteUser">
+          <Parameter Name="email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_editAuctionSale">
+            <Parameter Name="SaleId" Mode="In" Type="Int32" />
+            <Parameter Name="value" Mode="In" Type="Decimal" />
+            <Parameter Name="start" Mode="In" Type="DateTime" />
+            <Parameter Name="end" Mode="In" Type="DateTime" />
+            <Parameter Name="location" Mode="In" Type="String" />
+            <Parameter Name="minIncre" Mode="In" Type="Decimal" />
+            <Parameter Name="itemId" Mode="In" Type="Int32" />
+            <Parameter Name="country" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_editCountry">
+            <Parameter Name="numCode" Mode="In" Type="Int32" />
+            <Parameter Name="alpha2" Mode="In" Type="String" />
+            <Parameter Name="alpha3" Mode="In" Type="String" />
+            <Parameter Name="desc" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_editItem">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="desc" Mode="In" Type="String" />
+            <Parameter Name="condition" Mode="In" Type="Int32" />
+            <Parameter Name="email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_editPostalValue">
+            <Parameter Name="numCodeSource" Mode="In" Type="Int32" />
+            <Parameter Name="numCodeDest" Mode="In" Type="Int32" />
+            <Parameter Name="value" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_editSale">
+            <Parameter Name="SaleId" Mode="In" Type="Int32" />
+            <Parameter Name="value" Mode="In" Type="Decimal" />
+            <Parameter Name="start" Mode="In" Type="DateTime" />
+            <Parameter Name="end" Mode="In" Type="DateTime" />
+            <Parameter Name="location" Mode="In" Type="String" />
+            <Parameter Name="country" Mode="In" Type="Int32" />
+            <Parameter Name="itemId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_editUser">
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="address" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="country" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="V_ActiveAuctions" EntityType="SI2Model.V_ActiveAuctions" />
+          <EntitySet Name="vBids" EntityType="SI2Model.vBid" />
+          <FunctionImport Name="sp_validateUser">
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="result" Mode="InOut" Type="Boolean" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="V_ActiveAuctions">
+          <Key>
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="UserEmail" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="UserEmail" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Decimal" Precision="15" Scale="2" />
+        </EntityType>
+        <EntityType Name="vBid">
+          <Key>
+            <PropertyRef Name="BidId" />
+            <PropertyRef Name="Deleted" />
+            <PropertyRef Name="SaleId" />
+            <PropertyRef Name="Stamp" />
+            <PropertyRef Name="UserEmail" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="BidId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <Property Name="SaleId" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserEmail" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Decimal" Nullable="false" Precision="15" Scale="2" />
+          <Property Name="ROW_NR" Type="Int64" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SI2ModelStoreContainer" CdmEntityContainer="SI2_Entities">
+          <EntitySetMapping Name="AuctionSales">
+            <EntityTypeMapping TypeName="SI2Model.AuctionSale">
+              <MappingFragment StoreEntitySet="AuctionSale">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="MinIncrement" ColumnName="MinIncrement" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bids">
+            <EntityTypeMapping TypeName="SI2Model.Bid">
+              <MappingFragment StoreEntitySet="Bid">
+                <ScalarProperty Name="BidId" ColumnName="BidId" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="SI2Model.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="NumericCode" ColumnName="NumericCode" />
+                <ScalarProperty Name="Alpha2Code" ColumnName="Alpha2Code" />
+                <ScalarProperty Name="Alpha3Code" ColumnName="Alpha3Code" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="SI2Model.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ItemConditionId" ColumnName="ItemConditionId" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemConditions">
+            <EntityTypeMapping TypeName="SI2Model.ItemCondition">
+              <MappingFragment StoreEntitySet="ItemCondition">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PostalValues">
+            <EntityTypeMapping TypeName="SI2Model.PostalValue">
+              <MappingFragment StoreEntitySet="PostalValues">
+                <ScalarProperty Name="NumericCodeFrom" ColumnName="NumericCodeFrom" />
+                <ScalarProperty Name="NumericCodeTo" ColumnName="NumericCodeTo" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Purchases">
+            <EntityTypeMapping TypeName="SI2Model.Purchase">
+              <MappingFragment StoreEntitySet="Purchase">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="TotalValue" ColumnName="TotalValue" />
+                <ScalarProperty Name="CreditCard" ColumnName="CreditCard" />
+                <ScalarProperty Name="BidId" ColumnName="BidId" />
+                <ScalarProperty Name="CountryToShip" ColumnName="CountryToShip" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sales">
+            <EntityTypeMapping TypeName="SI2Model.Sale">
+              <MappingFragment StoreEntitySet="Sale">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="CountryNum" ColumnName="CountryNum" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="SaleValue" ColumnName="SaleValue" />
+                <ScalarProperty Name="IsAuction" ColumnName="IsAuction" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SI2Model.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="CountryNum" ColumnName="CountryNum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAddressHistories">
+            <EntityTypeMapping TypeName="SI2Model.UserAddressHistory">
+              <MappingFragment StoreEntitySet="UserAddressHistory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="OldAddress" ColumnName="OldAddress" />
+                <ScalarProperty Name="OldCountry" ColumnName="OldCountry" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_AuctionNotCompleted">
+            <EntityTypeMapping TypeName="SI2Model.V_AuctionNotCompleted">
+              <MappingFragment StoreEntitySet="V_AuctionNotCompleted">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_RakedBids">
+            <EntityTypeMapping TypeName="SI2Model.V_RakedBids">
+              <MappingFragment StoreEntitySet="V_RakedBids">
+                <ScalarProperty Name="BidId" ColumnName="BidId" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="RNK_SALE" ColumnName="RNK_SALE" />
+                <ScalarProperty Name="RNK_DATE" ColumnName="RNK_DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vAuctions">
+            <EntityTypeMapping TypeName="SI2Model.vAuction">
+              <MappingFragment StoreEntitySet="vAuction">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="CountryNum" ColumnName="CountryNum" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="SaleValue" ColumnName="SaleValue" />
+                <ScalarProperty Name="MinIncrement" ColumnName="MinIncrement" />
+                <ScalarProperty Name="ROW_NR" ColumnName="ROW_NR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vItems">
+            <EntityTypeMapping TypeName="SI2Model.vItem">
+              <MappingFragment StoreEntitySet="vItem">
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ItemConditionId" ColumnName="ItemConditionId" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="ROW_NR" ColumnName="ROW_NR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vSales">
+            <EntityTypeMapping TypeName="SI2Model.vSale">
+              <MappingFragment StoreEntitySet="vSale">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="CountryNum" ColumnName="CountryNum" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="SaleValue" ColumnName="SaleValue" />
+                <ScalarProperty Name="ROW_NR" ColumnName="ROW_NR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vUsers">
+            <EntityTypeMapping TypeName="SI2Model.vUser">
+              <MappingFragment StoreEntitySet="vUser">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="CountryNum" ColumnName="CountryNum" />
+                <ScalarProperty Name="ROW_NR" ColumnName="ROW_NR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionName="SI2Model.Store.getNLastBids" FunctionImportName="getNLastBids">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI2Model.getNLastBids_Result">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="Bid" ColumnName="Bid" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_addAuctionSale" FunctionName="SI2Model.Store.sp_addAuctionSale" />
+          <FunctionImportMapping FunctionImportName="sp_addBid" FunctionName="SI2Model.Store.sp_addBid" />
+          <FunctionImportMapping FunctionImportName="sp_addCountry" FunctionName="SI2Model.Store.sp_addCountry" />
+          <FunctionImportMapping FunctionImportName="sp_addItem" FunctionName="SI2Model.Store.sp_addItem" />
+          <FunctionImportMapping FunctionImportName="sp_addPostalValue" FunctionName="SI2Model.Store.sp_addPostalValue" />
+          <FunctionImportMapping FunctionImportName="sp_addSale" FunctionName="SI2Model.Store.sp_addSale" />
+          <FunctionImportMapping FunctionImportName="sp_addUser" FunctionName="SI2Model.Store.sp_addUser" />
+          <FunctionImportMapping FunctionImportName="sp_closeSale" FunctionName="SI2Model.Store.sp_closeSale" />
+          <FunctionImportMapping FunctionImportName="sp_deleteAuctionSale" FunctionName="SI2Model.Store.sp_deleteAuctionSale" />
+          <FunctionImportMapping FunctionImportName="sp_deleteBid" FunctionName="SI2Model.Store.sp_deleteBid" />
+          <FunctionImportMapping FunctionImportName="sp_deleteCountry" FunctionName="SI2Model.Store.sp_deleteCountry" />
+          <FunctionImportMapping FunctionImportName="sp_deleteItem" FunctionName="SI2Model.Store.sp_deleteItem" />
+          <FunctionImportMapping FunctionImportName="sp_deletePostalValue" FunctionName="SI2Model.Store.sp_deletePostalValue" />
+          <FunctionImportMapping FunctionImportName="sp_deleteSale" FunctionName="SI2Model.Store.sp_deleteSale" />
+          <FunctionImportMapping FunctionImportName="sp_deleteUser" FunctionName="SI2Model.Store.sp_deleteUser" />
+          <FunctionImportMapping FunctionImportName="sp_editAuctionSale" FunctionName="SI2Model.Store.sp_editAuctionSale" />
+          <FunctionImportMapping FunctionImportName="sp_editCountry" FunctionName="SI2Model.Store.sp_editCountry" />
+          <FunctionImportMapping FunctionImportName="sp_editItem" FunctionName="SI2Model.Store.sp_editItem" />
+          <FunctionImportMapping FunctionImportName="sp_editPostalValue" FunctionName="SI2Model.Store.sp_editPostalValue" />
+          <FunctionImportMapping FunctionImportName="sp_editSale" FunctionName="SI2Model.Store.sp_editSale" />
+          <FunctionImportMapping FunctionImportName="sp_editUser" FunctionName="SI2Model.Store.sp_editUser" />
+          <EntitySetMapping Name="V_ActiveAuctions">
+            <EntityTypeMapping TypeName="SI2Model.V_ActiveAuctions">
+              <MappingFragment StoreEntitySet="V_ActiveAuctions">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vBids">
+            <EntityTypeMapping TypeName="SI2Model.vBid">
+              <MappingFragment StoreEntitySet="vBid">
+                <ScalarProperty Name="ROW_NR" ColumnName="ROW_NR" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="BidId" ColumnName="BidId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_validateUser" FunctionName="SI2Model.Store.sp_validateUser" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

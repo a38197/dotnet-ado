@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="731168cf41f7452e9a50fbd3862ff82a" Name="Diagram1">
+        <EntityTypeShape EntityType="SI2Model.AuctionSale" Width="1.5" PointX="8.25" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.Bid" Width="1.5" PointX="8.25" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.Country" Width="1.5" PointX="0.75" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.Item" Width="1.5" PointX="5.25" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.ItemCondition" Width="1.5" PointX="3" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.PostalValue" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.Purchase" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.Sale" Width="1.5" PointX="6" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.User" Width="1.5" PointX="3" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.UserAddressHistory" Width="1.5" PointX="5.25" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.V_AuctionNotCompleted" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.V_RakedBids" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.vAuction" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.vItem" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.vSale" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SI2Model.vUser" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="SI2Model.FK_AuctionSale_SaleId" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_Bid_SaleId" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_Bid_UserEmail" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_Purchase_BidId" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_PostalValues_NumericCodeFrom" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_PostalValues_NumericCodeTo" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_Purchase_CountryToShip" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_Sale_CountryNum" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_User_CountryNum" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_Item_ItemConditionId" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_Item_UserEmail" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_Sale_ItemId" ManuallyRouted="false" />
+        <AssociationConnector Association="SI2Model.FK_UserAddressHistory_Email" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SI2Model.V_ActiveAuctions" Width="1.5" PointX="8.375" PointY="3.75" />
+        <EntityTypeShape EntityType="SI2Model.vBid" Width="1.5" PointX="10.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
